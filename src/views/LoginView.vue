@@ -17,36 +17,33 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { supabase } from '../supabaseClient/supabaseClient.js'
+import { useUserStore } from '../stores/user.js'
+import { authService } from '../services/authService.js'
 
 const email = ref('')
 const password = ref('')
 const error = ref('')
 const router = useRouter()
+const userStore = useUserStore()
 
 const login = async () => {
   error.value = ''
 
-  const { data, error: authError } = await supabase.auth.signInWithPassword({
-    email: email.value,
-    password: password.value
-  })
+  try {
+    const userData = await authService.login(email.value, password.value)
+    userStore.setUserData(userData)
 
-  if (authError) {
-    error.value = 'Email o contraseña incorrectos'
-    return
+    // lo dejo por las dudas
+    localStorage.setItem('usuario_id', userData.id)
+    localStorage.setItem('rol', userData.rol)
+
+    router.push('/turnos')
+  } catch (err) {
+    error.value = err.message
   }
-
-  const { data: { user } } = await supabase.auth.getUser()
-
-  const rol = user?.user_metadata?.rol || 'paciente' // por defecto, paciente
-
-  localStorage.setItem('usuario_id', user.id)
-  localStorage.setItem('rol', rol)
-
-  router.push('/turnos')
 }
 </script>
+
 
 <style scoped>
 .login-container {
