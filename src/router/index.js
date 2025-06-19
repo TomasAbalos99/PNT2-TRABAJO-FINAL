@@ -1,16 +1,26 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from '../views/LoginView.vue'
+import RegisterView from '../views/RegisterView.vue'
 import TurnosView from '../views/TurnosView.vue'
 import PacientesView from '../views/PacientesView.vue'
 import ReportesView from '../views/ReportesView.vue'
-import RegisterView from '../views/RegisterView.vue'
+import HomeView from '../views/HomeView.vue'
+import { guards } from './guards.js'
 
 const routes = [
-  { path: '/', name: 'login', component: LoginView },
-  { path: '/turnos', name: 'turnos', component: TurnosView },
-  { path: '/pacientes', name: 'pacientes', component: PacientesView },
-  { path: '/reportes', name: 'reportes', component: ReportesView },
-  { path: '/registro', name: 'Registro', component: RegisterView }
+  { path: '/', component: HomeView 
+  },
+  { path: '/login', component: LoginView, beforeEnter: guards.redirectIfAuthenticated
+  },
+  { path: '/register', component: RegisterView
+  },
+  { path: '/turnos', component: TurnosView, beforeEnter: guards.requireRole(['paciente', 'medico'])
+  },
+  { path: '/pacientes', component: PacientesView, beforeEnter: guards.requireRole(['medico'])
+  },
+  { path: '/reportes', component: ReportesView, beforeEnter: guards.requireRole(['admin'])
+  },
+  
 ]
 
 const router = createRouter({

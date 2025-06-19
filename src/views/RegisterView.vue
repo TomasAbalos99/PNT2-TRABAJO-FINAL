@@ -31,10 +31,12 @@
 </template>
 
 <script setup>
+
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { authService } from '../services/authService.js'
 import { useUserStore } from '../stores/user.js'
+
 
 const nombre = ref('')
 const email = ref('')

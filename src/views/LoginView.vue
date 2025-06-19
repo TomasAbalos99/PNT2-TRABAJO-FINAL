@@ -10,7 +10,7 @@
     <p v-if="error" class="error">{{ error }}</p>
 
     <!-- enlace al registro -->
-    <router-link to="/registro">¿No tenés cuenta? Registrate</router-link>
+    <router-link to="/register">¿No tenés cuenta? Registrate</router-link>
   </div>
 </template>
 
