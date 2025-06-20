@@ -1,6 +1,7 @@
 <template>
   <nav class="navbar">
     <div class="nav-left">
+      <router-link to="/">Inicio</router-link>
       <router-link to="/turnos">Turnos</router-link>
       <router-link v-if="userStore.rol === 'medico'" to="/pacientes">Pacientes</router-link>
       <router-link v-if="userStore.rol === 'admin'" to="/reportes">Reportes</router-link>

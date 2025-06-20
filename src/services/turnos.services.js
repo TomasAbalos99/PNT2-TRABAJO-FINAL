@@ -35,14 +35,26 @@ export const turnosService = {
   },
 
   // Cancelar un turno
-  cancelarTurno: async (id) => {
-    const { error } = await supabase.from('turnos').update({ estado: 'cancelado' }).eq('id', id)
-    if (error) throw new Error('No se pudo cancelar el turno')
-  },
+  cancelarTurno: async (turnoId) => {
+  const { error } = await supabase
+    .from('turnos')
+    .update({ estado: 'cancelado' })
+    .eq('id', turnoId)
+
+  if (error) throw new Error('No se pudo cancelar el turno')
+},
 
   // Editar un turno (por ejemplo, cambiar la fecha o motivo)
   editarTurno: async (id, nuevosDatos) => {
     const { error } = await supabase.from('turnos').update(nuevosDatos).eq('id', id)
     if (error) throw new Error('No se pudo editar el turno')
-  }
+  },
+ actualizarEstadoTurno: async (id, nuevoEstado) => {
+  const { error } = await supabase
+    .from('turnos')
+    .update({ estado: nuevoEstado })
+    .eq('id', id)
+
+  if (error) throw new Error('Error al actualizar el estado del turno')
+}
 }

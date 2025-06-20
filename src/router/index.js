@@ -6,6 +6,7 @@ import PacientesView from '../views/PacientesView.vue'
 import ReportesView from '../views/ReportesView.vue'
 import HomeView from '../views/HomeView.vue'
 import { guards } from './guards.js'
+import NuevoTurnoView from '../views/NuevoTurnoView.vue'
 
 const routes = [
   { path: '/', component: HomeView 
@@ -20,7 +21,9 @@ const routes = [
   },
   { path: '/reportes', component: ReportesView, beforeEnter: guards.requireRole(['admin'])
   },
-  
+  {
+    path: '/nuevo-turno', component: NuevoTurnoView, beforeEnter: guards.requireRole(['paciente'])
+  },
 ]
 
 const router = createRouter({
