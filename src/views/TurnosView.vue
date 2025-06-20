@@ -87,6 +87,7 @@ onMounted(async () => {
 })
 
 
+
 const cancelarTurno = async (turnoId) => {
   try {
     await turnosService.cancelarTurno(turnoId)

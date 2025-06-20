@@ -36,8 +36,8 @@ export const useUserStore = defineStore('user', {
     /**
      * Se llama luego del login exitoso
      */
-    setUserData({ auth_id, email, rol }) {
-      this.id = auth_id
+    setUserData({ id, email, rol }) {
+      this.id = id
       this.email = email
       this.rol = rol
       localStorage.setItem('rol', rol)
