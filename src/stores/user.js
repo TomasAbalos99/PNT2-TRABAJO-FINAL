@@ -1,30 +1,56 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { supabase } from '../supabaseClient/supabaseClient.js'
 
-export const useUserStore = defineStore('user', () => {
-  const id = ref(null)
-  const email = ref(null)
-  const rol = ref(null)
+export const useUserStore = defineStore('user', {
+  state: () => ({
+    id: null,
+    email: null,
+    rol: null
+  }),
 
-  const setUserData = (userData) => {
-    id.value = userData.id
-    email.value = userData.email
-    rol.value = userData.rol
-    localStorage.setItem('rol', userData.rol) // opcional si querés persistirlo
-  }
+  actions: {
+    /**
+     * Se llama al iniciar la app para cargar el usuario actual desde la sesión activa
+     */
+    async cargarUsuarioDesdeSesion() {
+      const { data: { user }, error: authError } = await supabase.auth.getUser()
 
-  const clearUserData = () => {
-    id.value = null
-    email.value = null
-    rol.value = null
-    localStorage.removeItem('rol') // 👈 limpia al cerrar sesión
-  }
+      if (authError || !user) return
 
-  return {
-    id,
-    email,
-    rol,
-    setUserData,
-    clearUserData
+      const { data, error } = await supabase
+        .from('usuarios')
+        .select('*')
+        .eq('auth_id', user.id)
+        .single()
+
+      if (!error && data) {
+        this.id = data.auth_id
+        this.email = data.email
+        this.rol = data.rol
+
+        // Actualiza localStorage para los guards
+        localStorage.setItem('rol', data.rol)
+      }
+    },
+
+    /**
+     * Se llama luego del login exitoso
+     */
+    setUserData({ auth_id, email, rol }) {
+      this.id = auth_id
+      this.email = email
+      this.rol = rol
+      localStorage.setItem('rol', rol)
+    },
+
+    /**
+     * Se llama al cerrar sesión
+     */
+    clearUserData() {
+      this.id = null
+      this.email = null
+      this.rol = null
+      localStorage.removeItem('rol')
+    }
   }
 })
