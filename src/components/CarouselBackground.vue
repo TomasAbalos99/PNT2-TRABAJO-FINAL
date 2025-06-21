@@ -23,7 +23,16 @@
     <!-- Ajusto saludo y boton dinamicos -->
     <div class="overlay-box text-white bg-dark bg-opacity-75 p-3 rounded">
       <h5 class="mb-2">Hola, {{ rolLabel }}</h5>
-      <router-link :to="botonRuta" class="btn btn-light btn-sm">{{ botonTexto }}</router-link>
+
+      <template v-if="userStore.rol">
+        <router-link :to="botonRuta" class="btn btn-light btn-sm">{{ botonTexto }}</router-link>
+      </template>
+
+      <template v-else>
+        <p class="mb-2">Registrate o iniciá sesión para solicitar turnos</p>
+        <router-link to="/login" class="btn btn-light btn-sm me-2">Iniciar sesión</router-link>
+        <router-link to="/register" class="btn btn-outline-light btn-sm">Registrarse</router-link>
+      </template>
     </div>
   </div>
 </template>
@@ -45,7 +54,7 @@ const botonTexto = computed(() => {
   if (userStore.rol === 'paciente') return 'Ver mis turnos'
   if (userStore.rol === 'medico') return 'Ver turnos asignados'
   if (userStore.rol === 'admin') return 'Ver reportes'
-  return 'Iniciar sesión'
+  return ''
 })
 
 const botonRuta = computed(() => {
