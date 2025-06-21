@@ -7,11 +7,15 @@ export const useUserStore = defineStore('user', {
     email: null,
     rol: null
   }),
- 
+
+  getters: {
+    estaLogeado: (state) => state.id !== null
+  },
+
   actions: {
-    /**
-     * Se llama al iniciar la app para cargar el usuario actual desde la sesión activa
-     */
+    
+      //Se llama al iniciar la app para cargar el usuario actual desde la sesión activa
+     
     async cargarUsuarioDesdeSesion() {
       const { data: { user }, error: authError } = await supabase.auth.getUser()
 
