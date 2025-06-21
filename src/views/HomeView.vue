@@ -1,26 +1,55 @@
 <template>
-  <div class="home-container">
-    <h1>Bienvenido a Gestión de Turnos Medicos</h1>
-    <p>Accedé a tu cuenta para administrar tus turnos, o solicitar uno nuevo.</p>
+  <div class="container mt-4">
+    <CarouselBackground>
+      <div v-if="!rol" class="bg-dark p-3 rounded">
+        <h3 class="text-white">Bienvenido a nuestro sistema</h3>
+        <router-link to="/login" class="btn btn-primary mt-2">Iniciar sesión</router-link>
+      </div>
 
-    <router-link to="/login">
-      <button>Iniciar sesion</button>
-    </router-link>
+      <div v-else-if="rol === 'paciente'" class="bg-dark p-3 rounded">
+        <h3 class="text-white">Hola, paciente</h3>
+        <router-link to="/turnos" class="btn btn-light mt-2">Ver mis turnos</router-link>
+      </div>
 
-    <router-link to="/register">
-      <button>Registrarse</button>
-    </router-link>
+      <div v-else-if="rol === 'medico'" class="bg-dark p-3 rounded">
+        <h3 class="text-white">Hola, doctor</h3>
+        <router-link to="/turnos" class="btn btn-light mt-2">Ver turnos asignados</router-link>
+      </div>
+
+      <div v-else-if="rol === 'admin'" class="bg-dark p-3 rounded">
+        <h3 class="text-white">Hola, administrador</h3>
+        <router-link to="/reportes" class="btn btn-light mt-2">Ir a reportes</router-link>
+      </div>
+    </CarouselBackground>
   </div>
 </template>
 
-<style scoped>
-.home-container {
-  text-align: center;
-  margin-top: 40px;
-}
+<script setup>
+import { useUserStore } from '../stores/user.js';
+import {useRouter} from 'vue-router';
+import { onMounted,computed } from 'vue';
+import CarouselBackground from '../components/CarouselBackground.vue'
 
-button {
-  margin: 10px;
-  padding: 10px 20px;
+const userStore = useUserStore();
+const router = useRouter();
+
+const rol = computed(() => userStore.rol);
+
+onMounted(() => {
+  if (!rol.value) {
+    router.push('/login')
+  }
+})
+</script>
+
+<style scoped>
+.overlay {
+  position: absolute;
+  top: 30%;
+  width: 100%;
+  text-align: center;
+  color: white;
+  background-color: rgba(0,0,0,0.5);
+  padding: 2rem;
 }
 </style>

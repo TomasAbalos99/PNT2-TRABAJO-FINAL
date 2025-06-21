@@ -7,7 +7,7 @@ export const useUserStore = defineStore('user', {
     email: null,
     rol: null
   }),
-
+ 
   actions: {
     /**
      * Se llama al iniciar la app para cargar el usuario actual desde la sesión activa
@@ -33,9 +33,9 @@ export const useUserStore = defineStore('user', {
       }
     },
 
-    /**
-     * Se llama luego del login exitoso
-     */
+    
+     //Se llama luego del login exitoso
+     
     setUserData({ id, email, rol }) {
       this.id = id
       this.email = email

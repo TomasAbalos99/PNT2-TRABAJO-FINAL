@@ -63,16 +63,15 @@ import { turnosService } from '../services/turnos.services.js'
 
 const userStore = useUserStore()
 
-// Turnos
+
 const turnos = ref([])
 const cargando = ref(true)
 const error = ref(null)
+const estadosSeleccionados = ref({}) 
 
 
-
-const estadosSeleccionados = ref({}) // guarda el estado elegido por turno (para el update de turno por parte del medico)
-// Cargar turnos al montar
-onMounted(async () => {
+const cargarTurnos = async () => {
+  if (!userStore.id || !userStore.rol) return
   cargando.value = true
   try {
     turnos.value = await turnosService.getTurnosPorUsuario(
@@ -84,19 +83,25 @@ onMounted(async () => {
   } finally {
     cargando.value = false
   }
-})
+};
+
+watch(
+  () => [userStore.id, userStore.rol],
+  ([nuevoId, nuevoRol]) => {
+    if (nuevoId && nuevoRol) {
+      cargarTurnos()
+    }
+  },
+  { immediate: true }
+)
 
 
 
 const cancelarTurno = async (turnoId) => {
   try {
-    await turnosService.cancelarTurno(turnoId)
+    await turnosService.cancelarTurno(turnoId);
+    await cargarTurnos();
 
-    // Refrescar turnos
-    turnos.value = await turnosService.getTurnosPorUsuario(
-      userStore.id,
-      userStore.rol
-    )
   } catch (err) {
     error.value = err.message
   }
@@ -108,9 +113,7 @@ const cambiarEstado = async (turnoId) => {
 
   try {
     await turnosService.actualizarEstadoTurno(turnoId, nuevoEstado)
-
-    // Refrescar lista
-    turnos.value = await turnosService.getTurnosPorUsuario(userStore.id, userStore.rol)
+    await cargarTurnos();
   } catch (err) {
     error.value = err.message
   }

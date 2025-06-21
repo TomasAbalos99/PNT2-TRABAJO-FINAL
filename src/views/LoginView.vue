@@ -37,7 +37,7 @@ const login = async () => {
     localStorage.setItem('usuario_id', userData.id)
     localStorage.setItem('rol', userData.rol)
 
-    router.push('/turnos')
+    router.push('/')
   } catch (err) {
     error.value = err.message
   }
