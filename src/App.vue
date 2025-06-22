@@ -2,7 +2,9 @@
   <div id="app" class="d-flex flex-column min-vh-100"> 
     <Navbar />
  <main class="flex-grow-1">
+   <transition name="fade" mode="out-in">
     <router-view />
+    </transition>
 </main>
     <Footer />
   </div>
@@ -36,4 +38,11 @@ onMounted(async () => {
 </script>
 
 <style>
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.4s ease;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
 </style>
