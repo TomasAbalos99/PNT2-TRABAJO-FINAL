@@ -34,11 +34,12 @@ Aplicación web desarrollada como trabajo práctico para la materia **Programaci
 - Navbar dinámico según sesión y rol
 - CRUD de turnos (en desarrollo)
 - Visualización de pacientes y reportes (por rol)
-
+- Visualizacion del perfil del usuario, con la posibilidad de editar campos nombre, telefono y direccion
 ---
 
 ## 🛠 Estructura del proyecto
 
+```bash
 src/
 ├── components/ # Navbar, Footer
 ├── views/ # LoginView, RegisterView, TurnosView, etc.
