@@ -41,10 +41,10 @@ Aplicación web desarrollada como trabajo práctico para la materia **Programaci
 
 ```bash
 src/
-├── components/ # Navbar, Footer
+├── components/ # Navbar, Footer, Carousel,Grafico de turnos
 ├── views/ # LoginView, RegisterView, TurnosView, etc.
 ├── router/ # Configuración de rutas y guards
-├── services/ # authService.js
+├── services/ # authService.js, usuariosServices.js,turnosServices.js
 ├── stores/ # userStore con Pinia
 └── supabaseClient/ # configuración de conexión
 
