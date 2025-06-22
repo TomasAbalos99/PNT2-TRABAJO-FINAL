@@ -41,5 +41,15 @@ export const usuariosService = {
     }
 
     return data.nombre
+  },
+  async actualizarPerfil(id, campos) {
+    const { error } = await supabase
+      .from('usuarios')
+      .update(campos)
+      .eq('auth_id', id)
+
+    if (error) {
+      throw new Error('Error al actualizar perfil: ' + error.message)
+    }
   }
 }

@@ -5,8 +5,9 @@ import TurnosView from '../views/TurnosView.vue'
 import PacientesView from '../views/PacientesView.vue'
 import ReportesView from '../views/ReportesView.vue'
 import HomeView from '../views/HomeView.vue'
-import { guards } from './guards.js'
+import PerfilView from '../views/PerfilView.vue'
 import NuevoTurnoView from '../views/NuevoTurnoView.vue'
+import { guards } from './guards.js'
 
 const routes = [
   { path: '/', component: HomeView 
@@ -21,9 +22,10 @@ const routes = [
   },
   { path: '/reportes', component: ReportesView, beforeEnter: guards.requireRole(['admin'])
   },
-  {
-    path: '/nuevo-turno', component: NuevoTurnoView, beforeEnter: guards.requireRole(['paciente'])
+  { path: '/nuevo-turno', component: NuevoTurnoView, beforeEnter: guards.requireRole(['paciente'])
   },
+  { path: '/perfil', component: PerfilView,beforeEnter:guards.requireAuth
+  }
 ]
 
 const router = createRouter({

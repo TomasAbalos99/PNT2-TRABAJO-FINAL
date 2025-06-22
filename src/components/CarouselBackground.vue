@@ -9,6 +9,9 @@
         <div class="carousel-item">
           <img src="/img/medico2.png" class="carousel-img" alt="Imagen 2" />
         </div>
+        <div class="carousel-item">
+          <img src="/img/medico3.png" class="carousel-img" alt="Imagen 3" />
+        </div>
       </div>
       <button class="carousel-control-prev" type="button" data-bs-target="#carouselHome" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
