@@ -180,15 +180,15 @@ const badgeClass = (estado) => {
 }
 const cargarNombreMedico = async (id) => {
   if (!nombresMedicos.value[id]) {
-    const nombre = await usuariosService.obtenerMedicoPorId(id)
-    if (nombre) nombresMedicos.value[id] = nombre
+    const usuario = await usuariosService.obtenerUsuarioPorId(id)
+    if (usuario.rol === 'medico' )  nombresMedicos.value[id] = usuario.nombre;
   }
 }
 
 const cargarNombrePaciente = async (id) => {
   if (!nombresPacientes.value[id]) {
-    const nombre = await usuariosService.obtenerPacientePorId(id)
-    if (nombre) nombresPacientes.value[id] = nombre
+    const usuario = await usuariosService.obtenerUsuarioPorId(id)
+    if (usuario.rol === 'paciente') nombresPacientes.value[id] = usuario.nombre;
   }
 }
 
