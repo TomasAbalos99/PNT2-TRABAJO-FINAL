@@ -1,5 +1,5 @@
 <template>
-  <footer class="footer bg-light text-center text-muted py-3 mt-auto shadow-sm">
+  <footer class="footer bg-dark text-white text-center py-3 mt-auto">
     <div class="container">
       <small>© {{ year }} Turnos Médicos - Todos los derechos reservados</small>
     </div>

@@ -88,6 +88,8 @@ const guardarCambios = async () => {
     })
     mensaje.value = 'Perfil actualizado correctamente.'
     modoEdicion.value = false
+
+    
   } catch (err) {
     console.error(err)
   }

@@ -11,38 +11,8 @@ export const usuariosService = {
 
     return data
   },
-    obtenerMedicoPorId: async(id) => {
-    const { data, error } = await supabase
-      .from('usuarios')
-      .select('nombre, rol')
-      .eq('auth_id', id)
-      .eq('rol', 'medico')
-      .single()
-
-    if (error) {
-      console.error('Error al obtener médico:', error.message)
-      return null
-    }
-
-    return data.nombre
-  },
-
-  obtenerPacientePorId: async(id) => {
-    const { data, error } = await supabase
-      .from('usuarios')
-      .select('nombre, rol')
-      .eq('auth_id', id)
-      .eq('rol', 'paciente')
-      .single()
-
-    if (error) {
-      console.error('Error al obtener paciente:', error.message)
-      return null
-    }
-
-    return data.nombre
-  },
-  async actualizarPerfil(id, campos) {
+    
+  actualizarPerfil: async(id, campos) => {
     const { error } = await supabase
       .from('usuarios')
       .update(campos)
@@ -51,5 +21,19 @@ export const usuariosService = {
     if (error) {
       throw new Error('Error al actualizar perfil: ' + error.message)
     }
+  },
+  obtenerUsuarioPorId: async (id) => {
+  const { data, error } = await supabase
+    .from('usuarios')
+    .select('nombre, telefono, direccion, email, rol')
+    .eq('auth_id', id)
+    .single()
+
+  if (error) {
+    console.error('Error al obtener usuario:', error.message)
+    return null
   }
+
+  return data
+},
 }
