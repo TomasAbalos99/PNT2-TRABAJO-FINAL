@@ -1,73 +1,108 @@
 <template>
-  <div class="turnos-container">
-    <h2>Gestión de Turnos</h2>
-    <p>Bienvenido! ingresaste como <strong>{{ userStore.rol }}</strong></p>
+  <div class="container my-5">
+    <h2 class="text-center mb-4">Gestión de Turnos</h2>
+    <p class="text-center">Bienvenido! Ingresaste como <strong>{{ userStore.rol }}</strong></p>
 
-    <div v-if="cargando">Cargando turnos...</div>
-    <div v-else-if="error" class="error">{{ error }}</div>
-    <div v-else-if="turnos.length === 0">
+    <div v-if="cargando" class="text-center text-muted">Cargando turnos...</div>
+    <div v-else-if="error" class="alert alert-danger text-center">{{ error }}</div>
+    <div v-else-if="turnos.length === 0" class="text-center">
       <p>No tenés turnos registrados.</p>
     </div>
-    <ul v-else>
-      <li v-for="turno in turnos" :key="turno.id">
-        📅 {{ new Date(turno.fecha).toLocaleString() }} — {{ turno.motivo }} ({{ turno.estado }})
-         <button
-    v-if="userStore.rol === 'paciente' && turno.estado === 'pendiente'"
-    @click="cancelarTurno(turno.id)"
-  >
-    Cancelar
-  </button>
 
-    <div v-if="userStore.rol === 'medico' && ['pendiente', 'confirmado'].includes(turno.estado)">
+    <div v-else>
+      <div v-for="turno in turnos" :key="turno.id" class="card mb-3 shadow-sm">
+        <div class="card-body d-flex justify-content-between align-items-center">
+          <div>
+            <h5 class="card-title mb-1">{{ userStore.rol === 'paciente'
+    ? nombresMedicos[turno.medico_id]
+    : nombresPacientes[turno.paciente_id] }}<!-- Depende el rol del que consulte, ve como titulo de las cards 
+    sel nombre del paciente (si es medico) o el del medico (si es paciente) -->
+</h5>
+            <p class="mb-0">
+              <span class="text-muted small">Estado:</span>
+              <span class="badge ms-2" :class="badgeClass(turno.estado)">{{ turno.estado }}</span>
+            </p>
+          </div>
 
-  <select
-  class="form-select d-inline w-auto"
-  v-model="estadosSeleccionados[turno.id]"
->
-  <option disabled value="">Seleccioná estado</option>
-  <option value="confirmado" v-if="turno.estado === 'pendiente'">Confirmar</option>
-  <option value="completado" v-if="turno.estado === 'confirmado'">Marcar como completado</option>
-  <option value="rechazado">Rechazar</option>
-</select>
+          <div class="d-flex align-items-center gap-2">
+            <!-- Boton Ver Detalle de los offcanva -->
+            <button
+              class="btn btn-outline-info btn-sm d-flex align-items-center gap-1"
+              data-bs-toggle="offcanvas"
+              :data-bs-target="'#offcanvasTurno' + turno.id"
+            >
+              <i class="bi bi-info-circle"></i>
+              Ver detalle
+            </button>
 
-<button
-  class="btn btn-primary btn-sm ms-2"
-  @click="cambiarEstado(turno.id)"
->
-  Guardar
-</button>
+            <!-- Acciones paciente -->
+            <div v-if="userStore.rol === 'paciente' && turno.estado === 'pendiente'">
+              <button class="btn btn-outline-danger btn-sm" @click="cancelarTurno(turno.id)">Cancelar</button>
+            </div>
 
-</div>
-      </li>
-    </ul>
+            <!-- Acciones medico -->
+            <div v-if="userStore.rol === 'medico' && ['pendiente', 'confirmado'].includes(turno.estado)" class="d-flex align-items-center">
+              <select class="form-select form-select-sm me-2 w-auto" v-model="estadosSeleccionados[turno.id]">
+                <option disabled value="">Seleccioná estado</option>
+                <option value="confirmado" v-if="turno.estado === 'pendiente'">Confirmar</option>
+                <option value="completado" v-if="turno.estado === 'confirmado'">Marcar como completado</option>
+                <option value="rechazado">Rechazar</option>
+              </select>
 
-    <div v-if="userStore.rol === 'medico'">
-      
+              <button class="btn btn-sm btn-primary" @click="cambiarEstado(turno.id)">Guardar</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Offcanvas -->
+        <div
+          class="offcanvas offcanvas-end"
+          :id="'offcanvasTurno' + turno.id"
+          tabindex="-1"
+          :aria-labelledby="'offcanvasLabel' + turno.id"
+        >
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" :id="'offcanvasLabel' + turno.id">Detalle del Turno</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <p><strong>Motivo:</strong> {{ turno.motivo }}</p>
+            <p><strong>Fecha:</strong> {{ new Date(turno.fecha).toLocaleString() }}</p>
+            <p><strong>Estado:</strong> {{ turno.estado }}</p>
+            <p><strong>ID:</strong> {{ turno.id }}</p>
+            
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div v-else-if="userStore.rol === 'paciente'">
-    
-      <router-link to="/nuevo-turno" class="btn btn-primary">
-  Solicitar turno
-</router-link>
-
-  </div>
+    <!-- Boton para pacientes -->
+    <div v-if="userStore.rol === 'paciente'" class="text-center mt-4">
+      <router-link to="/nuevo-turno" class="btn btn-success">Solicitar turno</router-link>
+    </div>
   </div>
 </template>
+
+
+
+
 
 <script setup>
 import { ref, onMounted, watch } from 'vue'
 import { useUserStore } from '../stores/user.js'
 import { turnosService } from '../services/turnos.services.js'
+import { usuariosService } from '../services/usuarios.services.js'
 
 
 const userStore = useUserStore()
-
-
 const turnos = ref([])
 const cargando = ref(true)
 const error = ref(null)
 const estadosSeleccionados = ref({}) 
+const nombresMedicos = ref({})
+const nombresPacientes = ref({})
+
+
 
 
 const cargarTurnos = async () => {
@@ -78,6 +113,16 @@ const cargarTurnos = async () => {
       userStore.id,
       userStore.rol
     )
+    await Promise.all(
+      turnos.value.map(async (turno) => {
+        if (userStore.rol === 'paciente') {
+          await cargarNombreMedico(turno.medico_id)
+        } else if (userStore.rol === 'medico') {
+          await cargarNombrePaciente(turno.paciente_id)
+        }
+      })
+    )
+
   } catch (err) {
     error.value = err.message
   } finally {
@@ -116,6 +161,34 @@ const cambiarEstado = async (turnoId) => {
     await cargarTurnos();
   } catch (err) {
     error.value = err.message
+  }
+}
+const badgeClass = (estado) => {
+  switch (estado) {
+    case 'pendiente':
+      return 'bg-warning text-dark'
+    case 'confirmado':
+      return 'bg-primary'
+    case 'completado':
+      return 'bg-success'
+    case 'rechazado':
+    case 'cancelado':
+      return 'bg-danger'
+    default:
+      return 'bg-secondary'
+  }
+}
+const cargarNombreMedico = async (id) => {
+  if (!nombresMedicos.value[id]) {
+    const nombre = await usuariosService.obtenerMedicoPorId(id)
+    if (nombre) nombresMedicos.value[id] = nombre
+  }
+}
+
+const cargarNombrePaciente = async (id) => {
+  if (!nombresPacientes.value[id]) {
+    const nombre = await usuariosService.obtenerPacientePorId(id)
+    if (nombre) nombresPacientes.value[id] = nombre
   }
 }
 

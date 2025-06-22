@@ -47,9 +47,9 @@ export const useUserStore = defineStore('user', {
       localStorage.setItem('rol', rol)
     },
 
-    /**
-     * Se llama al cerrar sesión
-     */
+    
+     //Se llama al cerrar sesión
+     
     clearUserData() {
       this.id = null
       this.email = null
