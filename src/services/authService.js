@@ -11,12 +11,24 @@ export const authService = {
 
     const { data: userData } = await supabase.auth.getUser()
     const user = userData.user
-    const rol = user?.user_metadata?.rol || 'paciente'
+   
+     const { data: dbUser, error: dbError } = await supabase
+      .from('usuarios')
+      .select('*')
+      .eq('auth_id', user.id)
+      .single()
+
+    if (dbError) throw new Error('No se pudo verificar el estado del usuario')
+
+    if (!dbUser.activo) {
+      await supabase.auth.signOut()
+      throw new Error('Tu cuenta fue desactivada por un administrador.')
+    }
 
     return {
       id: user.id,
       email: user.email,
-      rol
+      rol: dbUser.rol || 'paciente'
     }
   },
 

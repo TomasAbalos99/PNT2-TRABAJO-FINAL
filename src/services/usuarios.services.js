@@ -36,4 +36,36 @@ export const usuariosService = {
 
   return data
 },
+  obtenerTodos: async () => {
+    const { data, error } = await supabase
+      .from('usuarios')
+      .select('auth_id, nombre, email, rol, especialidad, activo')
+
+    if (error) {
+      throw new Error('Error al obtener usuarios: ' + error.message)
+    }
+
+    return data
+  },
+  cambiarEstadoActivo: async (auth_id, nuevoEstado) => {
+    const { error } = await supabase
+      .from('usuarios')
+      .update({ activo: nuevoEstado })
+      .eq('auth_id', auth_id)
+
+    if (error) {
+      throw new Error('Error al cambiar estado: ' + error.message)
+    }
+  },
+  actualizarEspecialidad: async (auth_id, nuevaEspecialidad) => {
+    const { error } = await supabase
+      .from('usuarios')
+      .update({ especialidad: nuevaEspecialidad })
+      .eq('auth_id', auth_id)
+
+    if (error) {
+      throw new Error('Error al actualizar especialidad: ' + error.message)
+    }
+  }
+
 }

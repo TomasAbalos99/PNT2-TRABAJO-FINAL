@@ -32,8 +32,10 @@ Aplicación web desarrollada como trabajo práctico para la materia **Programaci
 - Sesión persistente con recuperación automática desde Supabase
 - Middleware de protección de rutas (`guards.js`)
 - Navbar dinámico según sesión y rol
-- CRUD de turnos (en desarrollo)
-- Visualización de pacientes y reportes (por rol)
+- CRUD de turnos 
+- Visualización de turnos para medicos y pacientes; solo éstos ultimos pueden solicitad un turno.
+- Visualizacion de usuarios, desde sesion del administrador, pudiendo desactivar o activar cualquier cuenta.
+- Visualizacion de reportes (para admins), con al menos 2 graficos integrados calculando estadisticas (PacientexMedico-TurnosxEstado).
 - Visualizacion del perfil del usuario, con la posibilidad de editar campos nombre, telefono y direccion
 ---
 

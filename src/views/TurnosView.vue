@@ -86,7 +86,6 @@
             <p><strong>Motivo:</strong> {{ turno.motivo }}</p>
             <p><strong>Fecha:</strong> {{ new Date(turno.fecha).toLocaleString() }}</p>
             <p><strong>Estado:</strong> {{ turno.estado }}</p>
-            <p><strong>ID:</strong> {{ turno.id }}</p>
             <div v-if="userStore.rol === 'paciente'">
             <p><strong>Profesional:</strong> {{ nombresMedicos[turno.medico_id] }}</p>
             </div>

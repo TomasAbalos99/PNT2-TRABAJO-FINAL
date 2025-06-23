@@ -29,6 +29,10 @@
           <li class="nav-item" v-if="userStore.rol === 'admin'">
             <RouterLink class="nav-link" to="/reportes">Reportes</RouterLink>
           </li>
+          <li class="nav-item" v-if="userStore.rol === 'admin'">
+            <RouterLink class="nav-link" to="/usuarios">Usuarios</RouterLink>
+          </li>
+
         </ul>
 
         <ul class="navbar-nav">
