@@ -19,14 +19,16 @@ export const turnosService = {
   },
 
   // Crear un nuevo turno (paciente solicita turno con un médico)
-  crearTurno: async ({ fecha, motivo, paciente_id, medico_id }) => {
+  crearTurno: async ({ fecha, motivo, paciente_id, medico_id,urgencia,descripcion_urgencia}) => {
     const { data, error } = await supabase.from('turnos').insert([
       {
         fecha,
         motivo,
         estado: 'pendiente',
         paciente_id,
-        medico_id
+        medico_id,
+        urgencia,
+        descripcion_urgencia
       }
     ])
 

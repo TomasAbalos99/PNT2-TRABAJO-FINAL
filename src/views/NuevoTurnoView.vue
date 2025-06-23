@@ -27,6 +27,17 @@
           <label class="form-label">📝 Motivo</label>
           <input class="form-control" type="text" v-model="motivo" placeholder="Ej: Dolor de cabeza" required />
         </div>
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" v-model="esUrgencia" id="urgenciaCheck">
+          <label class="form-check-label" for="urgenciaCheck">
+       ¿Es una urgencia?
+          </label>
+        </div>
+
+        <div class="mb-3" v-if="esUrgencia">
+          <label class="form-label">✏️ Describí la urgencia</label>
+          <textarea class="form-control" v-model="descripcionUrgencia" rows="3"></textarea>
+        </div>
 
         <div class="d-flex justify-content-between">
           <router-link to="/turnos" class="btn btn-outline-secondary">Cancelar</router-link>
@@ -53,6 +64,8 @@ const fecha = ref('')
 const motivo = ref('')
 const medicos = ref([])
 const errorCrear = ref('')
+const esUrgencia = ref(false)
+const descripcionUrgencia = ref('')
 
 onMounted(async () => {
   try {
@@ -67,13 +80,19 @@ const crearTurno = async () => {
     errorCrear.value = 'Completá todos los campos.'
     return
   }
+  if (esUrgencia.value && !descripcionUrgencia.value.trim()) {
+    errorCrear.value = 'Describí la urgencia.'
+    return
+}
 
   try {
     await turnosService.crearTurno({
       fecha: fecha.value,
       motivo: motivo.value,
       paciente_id: userStore.id,
-      medico_id: medicoId.value
+      medico_id: medicoId.value,
+      urgencia: esUrgencia.value,
+      descripcion_urgencia: descripcionUrgencia.value || null
     })
 
     router.push('/turnos')
