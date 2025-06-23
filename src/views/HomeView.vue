@@ -65,20 +65,15 @@
 
 <script setup>
 import { useUserStore } from '../stores/user.js';
-import {useRouter} from 'vue-router';
-import { onMounted,computed } from 'vue';
+import {computed } from 'vue';
 import CarouselBackground from '../components/CarouselBackground.vue'
 
 const userStore = useUserStore();
-const router = useRouter();
+
 
 const rol = computed(() => userStore.rol);
 
-onMounted(() => {
-  if (!rol.value) {
-    router.push('/login')
-  }
-})
+
 </script>
 
 <style scoped>
