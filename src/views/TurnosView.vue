@@ -8,9 +8,26 @@
     <div v-else-if="turnos.length === 0" class="text-center">
       <p>No tenés turnos registrados.</p>
     </div>
-
+    
+    
     <div v-else>
-      <div v-for="turno in turnos" :key="turno.id" class="card mb-3 shadow-sm">
+        <!-- Filtros solo visibles para médicos -->
+  <div v-if="userStore.rol === 'medico'" class="mb-4 d-flex justify-content-center gap-2 flex-wrap">
+    <button
+      v-for="estado in estados"
+      :key="estado"
+      class="btn"
+      :class="estadoActivo === estado ? 'btn-secondary' : 'btn-outline-secondary'"
+      @click="estadoActivo = estado"
+    >
+      {{ estado }}
+    </button>
+  </div>
+
+      <div v-for="turno in turnosFiltrados" :key="turno.id" class="card mb-3 shadow-sm">
+
+
+
         <div class="card-body d-flex justify-content-between align-items-center">
           <div>
             <h5 class="card-title mb-1">{{ userStore.rol === 'paciente'
@@ -70,7 +87,9 @@
             <p><strong>Fecha:</strong> {{ new Date(turno.fecha).toLocaleString() }}</p>
             <p><strong>Estado:</strong> {{ turno.estado }}</p>
             <p><strong>ID:</strong> {{ turno.id }}</p>
-            
+            <div v-if="userStore.rol === 'paciente'">
+            <p><strong>Profesional:</strong> {{ nombresMedicos[turno.medico_id] }}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -89,7 +108,7 @@
 
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useUserStore } from '../stores/user.js'
 import { turnosService } from '../services/turnos.services.js'
 import { usuariosService } from '../services/usuarios.services.js'
@@ -102,8 +121,8 @@ const error = ref(null)
 const estadosSeleccionados = ref({}) 
 const nombresMedicos = ref({})
 const nombresPacientes = ref({})
-
-
+const estados = ['pendiente', 'confirmado', 'completado', 'rechazado', 'cancelado']
+const estadoActivo = ref('pendiente')
 
 
 const cargarTurnos = async () => {
@@ -193,6 +212,20 @@ const cargarNombrePaciente = async (id) => {
   }
 }
 
+const turnosFiltrados = computed(() => {
+  if (userStore.rol === 'medico') {
+    return turnos.value.filter(t => t.estado === estadoActivo.value)
+  }
+  return turnos.value
+})
+
+const etiquetasEstados = {
+  pendiente: 'Pendientes',
+  confirmado: 'Confirmados',
+  completado: 'Completados',
+  rechazado: 'Rechazados',
+  cancelado: 'Cancelados'
+}
 </script>
 
 <style scoped>

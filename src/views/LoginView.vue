@@ -1,9 +1,16 @@
 <template>
-  <div class="login-container">
-    <h2>Iniciar sesión</h2>
+  <div class="login-container mx-auto p-4 shadow rounded" style="max-width: 400px;">
+    <h2 class="text-center mb-4">Iniciar sesión</h2>
 
-    <input v-model="email" type="email" placeholder="Email" />
-    <input v-model="password" type="password" placeholder="Contraseña" />
+<div class="mb-3">
+    <label for="email" class="form-label">Email</label>
+    <input v-model="email" type="email" placeholder="ejemplo@email.com" />
+</div>
+
+<div class="mb-3">
+    <label for="password" class="form-label">Contraseña</label>
+    <input v-model="password" type="password" placeholder="••••••••" />
+</div>
 
     <button class = "btn btn-dark" @click="login">Ingresar</button>
 
