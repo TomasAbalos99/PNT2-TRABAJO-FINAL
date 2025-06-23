@@ -78,6 +78,7 @@
 
     <!-- Boton para pacientes -->
     <div v-if="userStore.rol === 'paciente'" class="text-center mt-4">
+      <p>¿Necesitas un turno? ¡Solicitalo acá!</p>
       <router-link to="/nuevo-turno" class="btn btn-success">Solicitar turno</router-link>
     </div>
   </div>

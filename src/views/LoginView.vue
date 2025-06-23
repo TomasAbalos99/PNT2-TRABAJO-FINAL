@@ -5,7 +5,7 @@
     <input v-model="email" type="email" placeholder="Email" />
     <input v-model="password" type="password" placeholder="Contraseña" />
 
-    <button @click="login">Ingresar</button>
+    <button class = "btn btn-dark" @click="login">Ingresar</button>
 
     <p v-if="error" class="error">{{ error }}</p>
 

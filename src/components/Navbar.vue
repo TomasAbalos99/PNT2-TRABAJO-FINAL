@@ -33,7 +33,7 @@
 
         <ul class="navbar-nav">
           <li class="nav-item" v-if="estaLogeado">
-            <button class="btn btn-outline-light" @click="logout">Cerrar sesión</button>
+            <button class="btn btn-outline-light" s @click="logout">Cerrar sesión</button> 
           </li>
           <li class="nav-item" v-else>
             <RouterLink class="btn btn-light" to="/login">Iniciar sesión</RouterLink>
