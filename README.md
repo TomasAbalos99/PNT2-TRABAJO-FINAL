@@ -62,3 +62,7 @@ npm install
 Correr en desarrollo:
 ```bash
 npm run dev
+
+
+## DEPLOY
+Deploy en Render, link: https://pnt2-trabajo-final.onrender.com/
