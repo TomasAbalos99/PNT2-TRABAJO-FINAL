@@ -4,7 +4,7 @@ export const usuariosService = {
   obtenerMedicos: async () => {
     const { data, error } = await supabase
       .from('usuarios')
-      .select('auth_id, nombre')
+      .select('auth_id, nombre, especialidad') // perdi un monton de tiempo aca
       .eq('rol', 'medico')
 
     if (error) throw new Error('No se pudieron cargar los médicos')

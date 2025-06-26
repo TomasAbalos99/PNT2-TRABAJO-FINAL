@@ -8,11 +8,23 @@
       </div>
 
       <form @submit.prevent="crearTurno">
+                <!-- Select de especialidad -->
+        <div class="mb-3">
+          <label class="form-label">🏥 Especialidad</label>
+          <select class="form-select" v-model="especialidadSeleccionada" required>
+            <option disabled value="">Seleccioná una especialidad</option>
+            <option v-for="esp in especialidades" :key="esp" :value="esp">
+              {{ esp }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Select de medico (filtrados segun especialidad) -->
         <div class="mb-3">
           <label class="form-label">👨‍⚕️ Médico</label>
-          <select class="form-select" v-model="medicoId" required>
+          <select class="form-select" v-model="medicoId" :disabled="medicosFiltrados.length === 0" required>
             <option disabled value="">Seleccioná un médico</option>
-            <option v-for="medico in medicos" :key="medico.auth_id" :value="medico.auth_id">
+            <option v-for="medico in medicosFiltrados" :key="medico.auth_id" :value="medico.auth_id">
               {{ medico.nombre }}
             </option>
           </select>
@@ -50,7 +62,7 @@
 
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '../stores/user.js'
 import { turnosService } from '../services/turnos.services.js'
@@ -66,6 +78,8 @@ const medicos = ref([])
 const errorCrear = ref('')
 const esUrgencia = ref(false)
 const descripcionUrgencia = ref('')
+const especialidades = ['clinica', 'pediatria','gastrologia','neurologia','kinesiologia', 'cardiologia', 'dermatologia']
+const especialidadSeleccionada = ref('')
 
 onMounted(async () => {
   try {
@@ -73,6 +87,16 @@ onMounted(async () => {
   } catch (err) {
     errorCrear.value = 'Error al cargar los médicos'
   }
+})
+
+const medicosFiltrados = computed(() => {
+  if (!especialidadSeleccionada.value) return []
+
+  return medicos.value.filter(
+    (m) =>
+      m.especialidad &&
+      normalizar(m.especialidad) === normalizar(especialidadSeleccionada.value)
+  )
 })
 
 const crearTurno = async () => {
@@ -100,6 +124,10 @@ const crearTurno = async () => {
     errorCrear.value = err.message
   }
 }
+
+const normalizar = (texto) =>
+  texto?.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim()
+
 </script>
 
 <style scoped>

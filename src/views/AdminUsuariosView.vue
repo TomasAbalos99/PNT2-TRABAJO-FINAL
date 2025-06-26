@@ -41,6 +41,7 @@
                 <option value="dermatologia">Dermatología</option>
                 <option value="gastrologia">Gastrología</option>
                 <option value="kinesiologia">Kinesiología</option>
+                <option value="oftalmologia">Oftalmologia</option>
               </select>
             </template>
             <span v-else>-</span>
