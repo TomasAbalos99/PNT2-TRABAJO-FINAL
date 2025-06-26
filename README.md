@@ -49,12 +49,12 @@ src/
 ├── services/ # authService.js, usuariosServices.js,turnosServices.js
 ├── stores/ # userStore con Pinia
 └── supabaseClient/ # configuración de conexión
-
+```
 
 
 ---
 
-## ▶ Para correr el proyecto
+##  Para correr el proyecto
 
  Instalar dependencias:
 
