@@ -62,6 +62,7 @@ src/
 npm install
 ```
 Correr en desarrollo:
+
 ```bash
 npm run dev
 ```
